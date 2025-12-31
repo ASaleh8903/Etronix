@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../styles/colors.dart';
@@ -231,131 +230,6 @@ void navigateAndFinish(
       },
     );
 
-// void showToast({
-//   required String text,
-//   required ToastState state,
-// }) =>
-//     Fluttertoast.showToast(
-//         msg: text,
-//         toastLength: Toast.LENGTH_LONG,
-//         gravity: ToastGravity.BOTTOM,
-//         timeInSecForIosWeb: 1,
-//         backgroundColor: chooseToastColor(state),
-//         textColor: Colors.white,
-//         fontSize: 16.0);
-//
-// enum ToastState { SUCCESS, ERROR, WARNING }
-//
-// Color chooseToastColor(ToastState state) {
-//   Color color;
-//   switch (state) {
-//     case ToastState.SUCCESS:
-//       color = Colors.green;
-//       break;
-//     case ToastState.ERROR:
-//       color = Colors.red;
-//       break;
-//     case ToastState.WARNING:
-//       color = Colors.amber;
-//       break;
-//   }
-//   return color;
-// }
-
-// Widget buildListProduct(
-//   model,
-//   context, {
-//   bool isOldPrice = true,
-// }) =>
-//     Padding(
-//       padding: const EdgeInsets.all(20.0),
-//       child: Container(
-//         height: 120.0,
-//         child: Row(
-//           children: [
-//             Stack(
-//               alignment: AlignmentDirectional.bottomStart,
-//               children: [
-//                 Image(
-//                   image: NetworkImage(model.image),
-//                   width: 120.0,
-//                   height: 120.0,
-//                 ),
-//                 if (model.discount != 0 && isOldPrice)
-//                   Container(
-//                     color: Colors.red,
-//                     padding: EdgeInsets.symmetric(
-//                       horizontal: 5.0,
-//                     ),
-//                     child: Text(
-//                       'DISCOUNT',
-//                       style: TextStyle(
-//                         fontSize: 8.0,
-//                         color: Colors.white,
-//                       ),
-//                     ),
-//                   ),
-//               ],
-//             ),
-//             SizedBox(
-//               width: 20.0,
-//             ),
-//             Expanded(
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   Text(
-//                     model.name,
-//                     maxLines: 2,
-//                     overflow: TextOverflow.ellipsis,
-//                     style: TextStyle(
-//                       fontSize: 14.0,
-//                       height: 1.3,
-//                     ),
-//                   ),
-//                   Spacer(),
-//                   Row(
-//                     children: [
-//                       Text(
-//                         model.price.toString(),
-//                         style: TextStyle(
-//                           fontSize: 12.0,
-//                           color: defaultColor,
-//                         ),
-//                       ),
-//                       SizedBox(
-//                         width: 5.0,
-//                       ),
-//                       if (model.discount != 0 && isOldPrice)
-//                         Text(
-//                           model.oldPrice.toString(),
-//                           style: TextStyle(
-//                             fontSize: 10.0,
-//                             color: Colors.grey,
-//                             decoration: TextDecoration.lineThrough,
-//                           ),
-//                         ),
-//                       Spacer(),
-//                       IconButton(
-//                         onPressed: () {},
-//                         icon: CircleAvatar(
-//                           radius: 15.0,
-//                           child: Icon(
-//                             Icons.favorite_border,
-//                             size: 14.0,
-//                             color: Colors.white,
-//                           ),
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
 void navigateTo(context, widget) => Navigator.push(
       context,
       MaterialPageRoute(
@@ -445,3 +319,4 @@ Widget settingSection({
     ],
   ),
 );
+

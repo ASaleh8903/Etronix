@@ -9,7 +9,7 @@ class OrderPage extends StatelessWidget {
       child: Center(
         child: Text(
           'Orders',
-          style: TextStyle(fontSize: 2, color: Colors.black),
+          style: TextStyle(fontSize: 30, color: Colors.black),
         ),
       ),
     );

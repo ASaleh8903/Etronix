@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class TopBar extends StatelessWidget {
-  const TopBar({super.key});
+class AdminTopBar extends StatelessWidget {
+  const AdminTopBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,10 +11,7 @@ class TopBar extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 8,
-          ),
+          BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8),
         ],
       ),
       child: Row(
@@ -25,7 +22,7 @@ class TopBar extends StatelessWidget {
                 hintText: 'Search...',
                 prefixIcon: const Icon(Icons.search),
                 filled: true,
-                fillColor: Colors.grey.shade100,
+                fillColor: Colors.grey.shade200,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide.none,
@@ -35,14 +32,11 @@ class TopBar extends StatelessWidget {
           ),
           const SizedBox(width: 16),
           IconButton(
-            icon: const Icon(Icons.notifications_none),
+            icon: const Icon(Icons.notifications_outlined, color: Colors.black),
             onPressed: () {},
           ),
           const SizedBox(width: 8),
-          const CircleAvatar(
-            radius: 18,
-            child: Icon(Icons.person),
-          ),
+          const CircleAvatar(radius: 18, child: Icon(Icons.person)),
         ],
       ),
     );

@@ -57,8 +57,7 @@ class Etronix extends StatelessWidget {
               AppCubit()..changeAppMode(fromShared: isDark ?? false),
         ),
         BlocProvider(
-          create: (BuildContext context) =>
-              AdminDashboardCubit(AdminInitialState()),
+          create: (BuildContext context) => AdminDashboardCubit(),
           // ..GetAdDetails()
         ),
       ],
