@@ -1,7 +1,7 @@
 import 'package:etronix/Layout/admin_dashboard/Cubit/states.dart';
 import 'package:etronix/Modules/admin_dashboard/customers_page.dart';
 import 'package:etronix/Modules/admin_dashboard/Dashboard/dashboard_page.dart';
-import 'package:etronix/Modules/admin_dashboard/order_page.dart';
+import 'package:etronix/Modules/admin_dashboard/Orders/order_page.dart';
 import 'package:etronix/Modules/admin_dashboard/products_page.dart';
 import 'package:etronix/Modules/admin_dashboard/settings_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +16,7 @@ class AdminDashboardCubit extends Cubit<AdminDashboardStates> {
 
   final List<Widget> sidebarScreens = [
     DashboardScreen(),
-    OrderPage(),
+    OrdersScreen(),
     ProductsPage(),
     CustomersPage(),
     SettingsPage(),
