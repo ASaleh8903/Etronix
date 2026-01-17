@@ -1,96 +1,9 @@
-// import 'package:flutter/material.dart';
-// import '../../../../../Shared/styles/colors.dart';
-
-// class DashboardCard extends StatefulWidget {
-//   final String title;
-//   final String value;
-//   final IconData icon;
-
-//   const DashboardCard({
-//     super.key,
-//     required this.title,
-//     required this.value,
-//     required this.icon,
-//   });
-
-//   @override
-//   State<DashboardCard> createState() => _DashboardCardState();
-// }
-
-// class _DashboardCardState extends State<DashboardCard> {
-//   bool isHover = false;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MouseRegion(
-//       onEnter: (_) => setState(() => isHover = true),
-//       onExit: (_) => setState(() => isHover = false),
-//       child: AnimatedContainer(
-//         duration: const Duration(milliseconds: 200),
-//         curve: Curves.easeOut,
-//         transform: isHover
-//             ? Matrix4.translationValues(0, -6, 0)
-//             : Matrix4.identity(),
-//         decoration: BoxDecoration(
-//           color: Colors.white,
-//           borderRadius: BorderRadius.circular(16),
-//           boxShadow: [
-//             BoxShadow(
-//               color: Colors.black.withOpacity(isHover ? 0.15 : 0.08),
-//               blurRadius: isHover ? 20 : 10,
-//               offset: const Offset(0, 6),
-//             ),
-//           ],
-//         ),
-//         padding: const EdgeInsets.all(20),
-//         child: Row(
-//           children: [
-//             Container(
-//               padding: const EdgeInsets.all(14),
-//               decoration: BoxDecoration(
-//                 color: AppColors.primary.withOpacity(0.1),
-//                 borderRadius: BorderRadius.circular(12),
-//               ),
-//               child: Icon(
-//                 widget.icon,
-//                 color: AppColors.primary,
-//                 size: 28,
-//               ),
-//             ),
-//             const SizedBox(width: 16),
-//             Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: [
-//                 Text(
-//                   widget.title,
-//                   style: TextStyle(
-//                     color: Colors.grey[600],
-//                     fontSize: 14,
-//                   ),
-//                 ),
-//                 const SizedBox(height: 6),
-//                 Text(
-//                   widget.value,
-//                   style: const TextStyle(
-//                     fontSize: 22,
-//                     fontWeight: FontWeight.bold,
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
 import 'package:flutter/material.dart';
 import '../../../../../Shared/styles/colors.dart';
 
 class DashboardCard extends StatefulWidget {
   final String title;
-  final String value; // القيمة هنا نص مثل "24500" أو "$24500"
+  final String value;
   final IconData icon;
 
   const DashboardCard({
