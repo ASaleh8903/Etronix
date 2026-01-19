@@ -6,71 +6,41 @@ import '../styles/colors.dart';
 
 Widget defaultButton({
   double? width,
-  double? height,
-  double? textSize,
-  Color textColor = Colors.white,
-  // Color color =defaultColor,
+  double height = 40,
   bool isUpperCase = true,
-  double radius = 3.0,
+  double radius = 20,
+  BuildContext? context,
   required Function function,
   required String text,
-}) =>
-    ClipRRect(
-      borderRadius: BorderRadius.circular(15),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-        child: Container(
-          width: width,
-          height: height,
-          padding: const EdgeInsets.symmetric(vertical: 30),
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(15),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 20,
-                offset: const Offset(0, 5),
-              ),
-            ],
-            border: Border.all(color: Colors.white.withOpacity(0.2)),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: MaterialButton(
-              onPressed: () {
-                function();
-              },
-              child: Center(
-                child: Text(
-                  // isUpperCase ? text.toUpperCase() : text,
-                  text,
-                  style: TextStyle(
-                    color: textColor,
-                    fontSize: textSize
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
+}) => Container(
+  width: width,
+  height: height,
+  child: MaterialButton(
+    onPressed: () {
+      function();
+    },
+    child: Text(
+      isUpperCase ? text.toUpperCase() : text,
+      style: TextStyle(color: Colors.white),
+    ),
+  ),
+  decoration: BoxDecoration(
+    color: AppColors.sidebar,
+    borderRadius: BorderRadius.circular(radius),
+  ),
+);
 
-Widget defaultTextButton(
-        {required Function function,
-        required String text,
-        // Color? color = defaultColor,
-        double? size = 18.0}) =>
-    TextButton(
-      onPressed: () {
-        function();
-      },
-      child: Text(
-        style: TextStyle( fontSize: size),
-        text.toString(),
-      ),
-    );
+Widget defaultTextButton({
+  required Function function,
+  required String text,
+  // Color? color = defaultColor,
+  double? size = 18.0,
+}) => TextButton(
+  onPressed: () {
+    function();
+  },
+  child: Text(style: TextStyle(fontSize: size), text.toString()),
+);
 
 class defaultFormField extends StatelessWidget {
   final BuildContext context;
@@ -109,41 +79,45 @@ class defaultFormField extends StatelessWidget {
   final Color? cursorColor;
   final Color outsideColor;
 
-  const defaultFormField(
-      {super.key,
-      required this.context,
-      required this.controller,
-      required this.validate,
-      // this.radius,
-      this.radius = 0.0,
-      this.focusNode,
-      this.textDirection,
-      this.errorText,
-      this.keyboardType = TextInputType.text,
-      this.label,
-      this.textFormFieldIcon,
-      this.autofocus = false,
-      this.prefix,
-      this.initialValue,
-      this.onSubmit,
-      this.onChange,
-      this.onTap,
-      this.enabled,
-      this.suffix,
-      this.suffixPressed,
-      this.constraints,
-      this.textAlign = TextAlign.start,
-      this.maxLines,
-      this.hintText,
-      this.isPassword = false,
-      this.inputFormatters,
-      this.textCapitalization = TextCapitalization.words,
-      t,
-      required this.type,
-      this.borderColor = Colors.black,
-      this.textColor = Colors.black,
-      this.height = 60,
-      this.prefixText, this.filledColor, this.cursorColor, required this.outsideColor});
+  const defaultFormField({
+    super.key,
+    required this.context,
+    required this.controller,
+    required this.validate,
+    // this.radius,
+    this.radius = 0.0,
+    this.focusNode,
+    this.textDirection,
+    this.errorText,
+    this.keyboardType = TextInputType.text,
+    this.label,
+    this.textFormFieldIcon,
+    this.autofocus = false,
+    this.prefix,
+    this.initialValue,
+    this.onSubmit,
+    this.onChange,
+    this.onTap,
+    this.enabled,
+    this.suffix,
+    this.suffixPressed,
+    this.constraints,
+    this.textAlign = TextAlign.start,
+    this.maxLines,
+    this.hintText,
+    this.isPassword = false,
+    this.inputFormatters,
+    this.textCapitalization = TextCapitalization.words,
+    t,
+    required this.type,
+    this.borderColor = Colors.black,
+    this.textColor = Colors.black,
+    this.height = 60,
+    this.prefixText,
+    this.filledColor,
+    this.cursorColor,
+    required this.outsideColor,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -167,14 +141,11 @@ class defaultFormField extends StatelessWidget {
       textAlignVertical: TextAlignVertical.center,
       initialValue: initialValue,
       cursorColor: cursorColor,
-      style: TextStyle(
-        fontSize: 14,
-      ),
+      style: TextStyle(fontSize: 14),
       decoration: InputDecoration(
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.green),
-            borderRadius: BorderRadius.all(Radius.circular(radius))
-
+          borderRadius: BorderRadius.all(Radius.circular(radius)),
         ),
         filled: true,
         fillColor: filledColor,
@@ -183,8 +154,8 @@ class defaultFormField extends StatelessWidget {
         prefixText: prefixText,
         // prefixStyle: TextStyle(color: Colors.grey),
         border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(radius),),
-                borderSide: BorderSide(width: 0, color: outsideColor)
+          borderRadius: BorderRadius.all(Radius.circular(radius)),
+          borderSide: BorderSide(width: 0, color: outsideColor),
         ),
         labelText: label,
         labelStyle: TextStyle(fontSize: 16, color: textColor),
@@ -195,9 +166,7 @@ class defaultFormField extends StatelessWidget {
                 onPressed: () {
                   suffixPressed!();
                 },
-                icon: Icon(
-                  suffix,
-                ),
+                icon: Icon(suffix),
               )
             : null,
       ),
@@ -206,73 +175,58 @@ class defaultFormField extends StatelessWidget {
 }
 
 Widget myDivider() => Padding(
-      padding: const EdgeInsetsDirectional.only(
-        start: 20.0,
-      ),
-      child: Container(
-        width: double.infinity,
-        height: 1.0,
-        color: Colors.grey[300],
-      ),
-    );
+  padding: const EdgeInsetsDirectional.only(start: 20.0),
+  child: Container(
+    width: double.infinity,
+    height: 1.0,
+    color: Colors.grey[300],
+  ),
+);
 
-void navigateAndFinish(
+void navigateAndFinish(context, widget) => Navigator.pushAndRemoveUntil(
   context,
-  widget,
-) =>
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (context) => widget,
+  MaterialPageRoute(builder: (context) => widget),
+  (route) {
+    return false;
+  },
+);
+
+void navigateTo(context, widget) =>
+    Navigator.push(context, MaterialPageRoute(builder: (context) => widget));
+
+Widget MultipleChoice({
+  required String title,
+  double? radius = 7.0,
+  Color? textColor = Colors.grey,
+  Color? borderColor = Colors.grey,
+  Color? iconColor = Colors.grey,
+  Function? function,
+}) => Container(
+  height: 60,
+  decoration: BoxDecoration(
+    border: Border.all(color: borderColor ?? Colors.grey),
+    borderRadius: BorderRadius.circular(radius!),
+  ),
+  width: double.infinity,
+  child: Row(
+    children: [
+      Expanded(
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Text(title, style: TextStyle(color: textColor)),
+        ),
       ),
-      (route) {
-        return false;
-      },
-    );
-
-void navigateTo(context, widget) => Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => widget,
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Icon(
+          Icons.keyboard_arrow_down_rounded,
+          color: iconColor,
+          size: 30,
+        ),
       ),
-    );
-
-
-Widget MultipleChoice(
-        {required String title,
-        double? radius = 7.0,
-        Color? textColor = Colors.grey,
-        Color? borderColor = Colors.grey,
-        Color? iconColor = Colors.grey,
-        Function? function}) =>
-    Container(
-      height: 60,
-      decoration: BoxDecoration(
-          border: Border.all(color: borderColor ?? Colors.grey),
-          borderRadius: BorderRadius.circular(radius!)),
-      width: double.infinity,
-      child: Row(
-        children: [
-          Expanded(
-              child: Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Text(
-              title,
-              style: TextStyle(color: textColor),
-            ),
-          )),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Icon(
-              Icons.keyboard_arrow_down_rounded,
-              color: iconColor,
-              size: 30,
-            ),
-          )
-        ],
-      ),
-    );
-
+    ],
+  ),
+);
 
 double calculateTextWidth(String text, TextStyle style) {
   final TextPainter textPainter = TextPainter(
@@ -287,9 +241,9 @@ double calculateTextWidth(String text, TextStyle style) {
 Widget settingSection({
   required String label,
   required IconData icon,
-  Function? function
+  Function? function,
 }) => GestureDetector(
-  onTap: (){
+  onTap: () {
     function!();
   },
   child: Row(
@@ -303,14 +257,15 @@ Widget settingSection({
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Icon(icon),
-              SizedBox(
-                width: 10,
-              ),
-              Text(label, style: TextStyle(
+              SizedBox(width: 10),
+              Text(
+                label,
+                style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 18
-              ),)
+                  fontSize: 18,
+                ),
+              ),
             ],
           ),
         ),
@@ -319,4 +274,3 @@ Widget settingSection({
     ],
   ),
 );
-

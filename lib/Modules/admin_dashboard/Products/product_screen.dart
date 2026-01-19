@@ -1,5 +1,5 @@
+import 'package:etronix/Modules/admin_dashboard/Products/Widgests/add_edit_product_screen.dart';
 import 'package:etronix/Modules/admin_dashboard/Products/Widgests/product_details_drawer.dart';
-import 'package:etronix/Shared/components/hover_animation.dart';
 import 'package:etronix/Shared/components/reveal_on_scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,7 +10,7 @@ import 'package:etronix/Shared/styles/colors.dart';
 class ProductsPage extends StatelessWidget {
   const ProductsPage({super.key});
 
-  static const categories = [
+  static const allCategories = [
     'Phones',
     'Tablets',
     'Laptops',
@@ -35,11 +35,71 @@ class ProductsPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _header(),
-                  const SizedBox(height: 20),
-                  Center(child: _categories(cubit)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Products',
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      _AddProductButton(
+                        onTap: () {
+                          cubit.isProductDialogEdit = false;
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AddEditProductDialog();
+                            },
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 25),
+
+                  _buildCategoriesBar(cubit),
+
                   const SizedBox(height: 24),
-                  Expanded(child: _productsGrid(cubit)),
+
+                  Expanded(
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        int crossAxisCount = 2;
+                        if (constraints.maxWidth > 1400)
+                          crossAxisCount = 5;
+                        else if (constraints.maxWidth > 1100)
+                          crossAxisCount = 4;
+                        else if (constraints.maxWidth > 750)
+                          crossAxisCount = 3;
+
+                        return GridView.builder(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: crossAxisCount,
+                                crossAxisSpacing: 20,
+                                mainAxisSpacing: 20,
+                                childAspectRatio: 0.82,
+                              ),
+                          itemCount: 10,
+                          itemBuilder: (context, index) {
+                            final product = {
+                              'name': 'Product ${index + 1}',
+                              'price': '\$${(index + 1) * 150}',
+                            };
+                            return RevealOnScroll(
+                              child: ProductCardItem(product: product),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -50,142 +110,224 @@ class ProductsPage extends StatelessWidget {
     );
   }
 
-  Widget _header() {
-    return Text(
-      'Products',
-      style: TextStyle(
-        fontSize: 28,
-        fontWeight: FontWeight.bold,
-        color: AppColors.textPrimary,
-      ),
-    );
-  }
-
-  Widget _categories(AdminDashboardCubit cubit) {
+  Widget _buildCategoriesBar(AdminDashboardCubit cubit) {
     return SizedBox(
-      height: 44,
+      height: 45,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        itemCount: categories.length,
+        itemCount: allCategories.length,
         separatorBuilder: (_, __) => const SizedBox(width: 12),
         itemBuilder: (context, index) {
-          final category = categories[index];
-          final isActive = cubit.selectedProducts.contains(category);
-
-          return GestureDetector(
+          final category = allCategories[index];
+          final isSelected = cubit.selectedProducts.contains(category);
+          return CategoryItem(
+            title: category,
+            isSelected: isSelected,
             onTap: () => cubit.toggleProduct(category),
-            child: SimpleHoverItem(
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: isActive ? AppColors.primary : AppColors.card,
-                  borderRadius: BorderRadius.circular(30),
-                  border: Border.all(
-                    color: isActive ? AppColors.primary : AppColors.border,
-                  ),
-                ),
-                child: Text(
-                  category,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: isActive ? Colors.white : AppColors.textPrimary,
-                  ),
-                ),
-              ),
-            ),
           );
         },
       ),
     );
   }
+}
 
-  Widget _productsGrid(AdminDashboardCubit cubit) {
-    final List<Map<String, dynamic>> products = List.generate(12, (index) {
-      return {
-        'name': 'Product ${index + 1}',
-        'price': '\$${(index + 1) * 120}',
-      };
-    });
+class _AddProductButton extends StatefulWidget {
+  final VoidCallback onTap;
+  const _AddProductButton({required this.onTap});
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final crossAxisCount = constraints.maxWidth > 1200
-            ? 4
-            : constraints.maxWidth > 900
-            ? 3
-            : 2;
+  @override
+  State<_AddProductButton> createState() => _AddProductButtonState();
+}
 
-        return GridView.builder(
-          padding: const EdgeInsets.only(bottom: 40),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: crossAxisCount,
-            crossAxisSpacing: 20,
-            mainAxisSpacing: 20,
-            childAspectRatio: 0.9,
+class _AddProductButtonState extends State<_AddProductButton> {
+  bool isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => isHovered = true),
+      onExit: (_) => setState(() => isHovered = false),
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          decoration: BoxDecoration(
+            color: isHovered ? AppColors.primary : AppColors.card,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: AppColors.primary, width: 1.5),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(isHovered ? 0.1 : 0.05),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
-          itemCount: products.length,
-          itemBuilder: (context, index) {
-            return RevealOnScroll(
-              child: _productCard(products[index], context),
-            );
-          },
-        );
-      },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.add_circle_outline_rounded,
+                size: 20,
+                color: isHovered ? Colors.white : AppColors.primary,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'Add Product',
+                style: TextStyle(
+                  color: isHovered ? Colors.white : AppColors.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
+}
 
-  Widget _productCard(Map<String, dynamic> product, BuildContext context) {
+class CategoryItem extends StatefulWidget {
+  final String title;
+  final bool isSelected;
+  final VoidCallback onTap;
+  const CategoryItem({
+    super.key,
+    required this.title,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  State<CategoryItem> createState() => _CategoryItemState();
+}
+
+class _CategoryItemState extends State<CategoryItem> {
+  bool isHovered = false;
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => isHovered = true),
+      onExit: (_) => setState(() => isHovered = false),
+      child: InkWell(
+        onTap: widget.onTap,
+        borderRadius: BorderRadius.circular(25),
+        hoverColor: Colors.transparent,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: widget.isSelected
+                ? AppColors.primary
+                : (isHovered
+                      ? AppColors.primary.withOpacity(0.1)
+                      : AppColors.card),
+            borderRadius: BorderRadius.circular(25),
+            border: Border.all(
+              color: widget.isSelected || isHovered
+                  ? AppColors.primary
+                  : AppColors.border,
+              width: 1.5,
+            ),
+          ),
+          child: Text(
+            widget.title,
+            style: TextStyle(
+              color: widget.isSelected
+                  ? Colors.white
+                  : (isHovered ? AppColors.primary : AppColors.textPrimary),
+              fontWeight: widget.isSelected || isHovered
+                  ? FontWeight.bold
+                  : FontWeight.normal,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ProductCardItem extends StatefulWidget {
+  final Map<String, dynamic> product;
+  const ProductCardItem({super.key, required this.product});
+
+  @override
+  State<ProductCardItem> createState() => _ProductCardItemState();
+}
+
+class _ProductCardItemState extends State<ProductCardItem> {
+  bool isHovered = false;
+  @override
+  Widget build(BuildContext context) {
     final cubit = AdminDashboardCubit.get(context);
-
-    return SimpleHoverItem(
-      child: GestureDetector(
-        onTap: () => cubit.openProductDrawer(product),
-        child: MouseRegion(
-          cursor: SystemMouseCursors.click,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: MouseRegion(
+        onEnter: (_) => setState(() => isHovered = true),
+        onExit: (_) => setState(() => isHovered = false),
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          onTap: () => cubit.openProductDrawer(widget.product),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 250),
+            transform: isHovered
+                ? (Matrix4.identity()..translate(0, -8, 0))
+                : Matrix4.identity(),
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: AppColors.card,
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppColors.border),
+              border: Border.all(
+                color: isHovered ? AppColors.primary : AppColors.border,
+                width: isHovered ? 1.5 : 1,
+              ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 20,
-                  offset: const Offset(0, 10),
+                  color: Colors.black.withOpacity(isHovered ? 0.08 : 0.04),
+                  blurRadius: isHovered ? 20 : 10,
+                  offset: Offset(0, isHovered ? 10 : 5),
                 ),
               ],
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(18),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.background,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: const Center(child: Icon(Icons.devices, size: 48)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: isHovered
+                          ? AppColors.primary.withOpacity(0.05)
+                          : AppColors.background,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Icon(
+                      Icons.devices,
+                      size: 40,
+                      color: isHovered ? AppColors.primary : Colors.grey,
                     ),
                   ),
-                  const SizedBox(height: 14),
-                  Text(
-                    product['name'],
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                    ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  widget.product['name'],
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: isHovered ? AppColors.primary : Colors.black87,
                   ),
-                  const SizedBox(height: 6),
-                  Text(
-                    product['price'],
-                    style: TextStyle(color: AppColors.primary),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  widget.product['price'],
+                  style: TextStyle(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w500,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

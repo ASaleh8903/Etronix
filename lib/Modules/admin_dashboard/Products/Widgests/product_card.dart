@@ -1,69 +1,85 @@
-import 'package:etronix/Shared/components/hover_animation.dart';
-import 'package:etronix/Shared/styles/colors.dart';
+import 'package:etronix/Models/admin_dashboard/product_model.dart';
 import 'package:flutter/material.dart';
 
-class ProductCard extends StatefulWidget {
-  final Map<String, dynamic> product;
-  const ProductCard({super.key, required this.product});
 
-  @override
-  State<ProductCard> createState() => _ProductCardState();
-}
+class ProductCard extends StatelessWidget {
+  final ProductModel product;
+  final VoidCallback onEdit;
 
-class _ProductCardState extends State<ProductCard> {
-  bool hover = false;
+  const ProductCard({
+    super.key,
+    required this.product,
+    required this.onEdit,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => hover = true),
-      onExit: (_) => setState(() => hover = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
-        transform: hover
-            ? (Matrix4.identity()..translate(0.0, -8.0))
-            : Matrix4.identity(),
-        decoration: BoxDecoration(
-          color: AppColors.card,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.border),
-          boxShadow: hover
-              ? [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.08),
-                    blurRadius: 20,
-                    offset: const Offset(0, 12),
-                  ),
-                ]
-              : [],
-        ),
-        padding: const EdgeInsets.all(16),
+    return Card(
+      shape:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: SimpleHoverItem(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.background,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  alignment: Alignment.center,
-                  child: const Icon(Icons.image, size: 48),
-                ),
+            /// Name
+            Text(
+              product.name,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
               ),
             ),
-            const SizedBox(height: 12),
-            Text(
-              widget.product['name'],
-              style: const TextStyle(fontWeight: FontWeight.w600),
+
+            const SizedBox(height: 6),
+
+           
+            Wrap(
+              spacing: 6,
+              children: product.categories
+                  .map((e) => Chip(label: Text(e)))
+                  .toList(),
             ),
-            const SizedBox(height: 4),
-            Text(
-              '\$${widget.product['price']}',
-              style: TextStyle(color: AppColors.primary),
+
+            const SizedBox(height: 6),
+
+            
+            Row(
+              children: [
+                Icon(
+                  product.isAvailable
+                      ? Icons.check_circle
+                      : Icons.cancel,
+                  color: product.isAvailable
+                      ? Colors.green
+                      : Colors.red,
+                ),
+                const SizedBox(width: 6),
+                Text(product.isAvailable
+                    ? 'Available'
+                    : 'Out of Stock'),
+              ],
             ),
+
+            if (product.hasCoupon)
+              const Padding(
+                padding: EdgeInsets.only(top: 6),
+                child: Chip(
+                  label: Text('Coupon'),
+                  backgroundColor: Colors.greenAccent,
+                ),
+              ),
+
+            const Spacer(),
+
+           
+            Align(
+              alignment: Alignment.bottomRight,
+              child: IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: onEdit,
+              ),
+            )
           ],
         ),
       ),

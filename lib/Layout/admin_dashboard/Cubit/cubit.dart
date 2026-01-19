@@ -1,4 +1,5 @@
 import 'package:etronix/Layout/admin_dashboard/Cubit/states.dart';
+import 'package:etronix/Models/admin_dashboard/product_model.dart';
 import 'package:etronix/Modules/admin_dashboard/customers_page.dart';
 import 'package:etronix/Modules/admin_dashboard/Dashboard/dashboard_page.dart';
 import 'package:etronix/Modules/admin_dashboard/Orders/order_page.dart';
@@ -7,12 +8,7 @@ import 'package:etronix/Modules/admin_dashboard/settings_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 
-enum OrderFilterCategory {
-  date,
-  payment,
-  status,
-  products,
-}
+enum OrderFilterCategory { date, payment, status, products }
 
 class AdminDashboardCubit extends Cubit<AdminDashboardStates> {
   AdminDashboardCubit() : super(AdminInitialState());
@@ -47,8 +43,7 @@ class AdminDashboardCubit extends Cubit<AdminDashboardStates> {
   }
 
   void selectFilterCategory(OrderFilterCategory category) {
-    activeFilterCategory =
-        activeFilterCategory == category ? null : category;
+    activeFilterCategory = activeFilterCategory == category ? null : category;
     emit(FilterCategorySelectedstate());
   }
 
@@ -103,7 +98,6 @@ class AdminDashboardCubit extends Cubit<AdminDashboardStates> {
     emit(FilterClearAllstate());
   }
 
-
   final List<String> productCategories = const [
     'Phones',
     'Tablets',
@@ -127,18 +121,45 @@ class AdminDashboardCubit extends Cubit<AdminDashboardStates> {
   }
 
   Map<String, dynamic>? selectedProduct;
-bool isProductDrawerOpen = false;
+  bool isProductDrawerOpen = false;
 
-void openProductDrawer(Map<String, dynamic> product) {
-  selectedProduct = product;
-  isProductDrawerOpen = true;
-  emit(OpenProductDrawerState());
-}
+  void openProductDrawer(Map<String, dynamic> product) {
+    selectedProduct = product;
+    isProductDrawerOpen = true;
+    emit(OpenProductDrawerState());
+  }
 
-void closeProductDrawer() {
-  selectedProduct = null;
-  isProductDrawerOpen = false;
-  emit(CloseProductDrawerState());
-}
+  void closeProductDrawer() {
+    selectedProduct = null;
+    isProductDrawerOpen = false;
+    emit(CloseProductDrawerState());
+  }
+
+  final List<ProductModel> products = [];
+
+  void addProduct(ProductModel product) {
+    products.add(product);
+    emit(ProductsUpdated());
+  }
+
+  void updateProduct(ProductModel updatedProduct) {
+    final index = products.indexWhere((p) => p.id == updatedProduct.id);
+    if (index != -1) {
+      products[index] = updatedProduct;
+      emit(ProductsUpdated());
+    }
+  }
+
+  void toggleAvailability(String productId) {
+    final index = products.indexWhere((p) => p.id == productId);
+    if (index != -1) {
+      products[index] = products[index].copyWith(
+        isAvailable: !products[index].isAvailable,
+      );
+      emit(ProductsUpdated());
+    }
+  }
+
+  bool isProductDialogEdit = false;
 
 }

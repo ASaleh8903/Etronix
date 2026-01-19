@@ -3,59 +3,89 @@ import 'package:flutter/material.dart';
 
 class CategoriesBar extends StatelessWidget {
   final List<String> categories;
-  final int selectedIndex;
-  final Function(int) onSelect;
+  final List<String> selectedCategories;
+  final Function(String) onSelect;
 
   const CategoriesBar({
     super.key,
     required this.categories,
-    required this.selectedIndex,
+    required this.selectedCategories,
     required this.onSelect,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 48,
+      height: 45,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: categories.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 10),
+        separatorBuilder: (_, __) => const SizedBox(width: 12),
         itemBuilder: (context, index) {
-          final selected = index == selectedIndex;
+          final category = categories[index];
+          final isSelected = selectedCategories.contains(category);
 
-          return GestureDetector(
-            onTap: () => onSelect(index),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 250),
-              padding: const EdgeInsets.symmetric(horizontal: 18),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: selected ? AppColors.primary : AppColors.card,
-                borderRadius: BorderRadius.circular(24),
-                border: Border.all(
-                  color: selected ? AppColors.primary : AppColors.border,
-                ),
-                boxShadow: selected
-                    ? [
-                        BoxShadow(
-                          color: AppColors.primary.withOpacity(0.25),
-                          blurRadius: 12,
-                          offset: const Offset(0, 6),
-                        )
-                      ]
-                    : [],
-              ),
-              child: Text(
-                categories[index],
-                style: TextStyle(
-                  color: selected ? Colors.white : AppColors.textPrimary,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
+          return CategoryItem(
+            title: category,
+            isSelected: isSelected,
+            onTap: () => onSelect(category),
           );
         },
+      ),
+    );
+  }
+}
+
+class CategoryItem extends StatefulWidget {
+  final String title;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const CategoryItem({
+    super.key,
+    required this.title,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  State<CategoryItem> createState() => _CategoryItemState();
+}
+
+class _CategoryItemState extends State<CategoryItem> {
+  bool isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => isHovered = true),
+      onExit: (_) => setState(() => isHovered = false),
+      child: InkWell(
+        onTap: widget.onTap,
+        borderRadius: BorderRadius.circular(25),
+        hoverColor: Colors.transparent, 
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: widget.isSelected 
+                ? AppColors.primary 
+                : (isHovered ? AppColors.primary.withOpacity(0.1) : AppColors.card),
+            borderRadius: BorderRadius.circular(25),
+            border: Border.all(
+              color: widget.isSelected || isHovered ? AppColors.primary : AppColors.border,
+              width: 1.5,
+            ),
+          ),
+          child: Text(
+            widget.title,
+            style: TextStyle(
+              color: widget.isSelected ? Colors.white : (isHovered ? AppColors.primary : AppColors.textPrimary),
+              fontWeight: widget.isSelected || isHovered ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+        ),
       ),
     );
   }
