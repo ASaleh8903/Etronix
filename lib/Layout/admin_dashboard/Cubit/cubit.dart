@@ -1,6 +1,6 @@
 import 'package:etronix/Layout/admin_dashboard/Cubit/states.dart';
 import 'package:etronix/Models/admin_dashboard/product_model.dart';
-import 'package:etronix/Modules/admin_dashboard/customers_page.dart';
+import 'package:etronix/Modules/admin_dashboard/Customers/customers_page.dart';
 import 'package:etronix/Modules/admin_dashboard/Dashboard/dashboard_page.dart';
 import 'package:etronix/Modules/admin_dashboard/Orders/order_page.dart';
 import 'package:etronix/Modules/admin_dashboard/Products/product_screen.dart';
@@ -161,5 +161,33 @@ class AdminDashboardCubit extends Cubit<AdminDashboardStates> {
   }
 
   bool isProductDialogEdit = false;
+
+    Map<String, dynamic>? selectedCustomer;
+
+  final List<Map<String, dynamic>> customers = [
+    {
+      'name': 'Ahmed Saleh',
+      'phone': '01012345678',
+      'email': 'ahmed@email.com',
+      'totalOrders': 5,
+      'totalSpent': 18500,
+      'lastPurchase': '2025-01-20',
+      'products': [
+        {'name': 'Laptop Dell', 'price': '15000', 'date': '2025-01-20'},
+        {'name': 'Mouse', 'price': '350', 'date': '2025-01-18'},
+      ],
+      'coupons': [
+        {'code': 'WELCOME10', 'discount': '10%', 'status': 'Used'},
+      ],
+      'orders': [
+        {'id': '#1001', 'total': '15350', 'date': '2025-01-20'},
+      ]
+    }
+  ];
+
+  void selectCustomer(Map<String, dynamic> customer) {
+    selectedCustomer = customer;
+    emit(CustomerSelectedState());
+  }
 
 }

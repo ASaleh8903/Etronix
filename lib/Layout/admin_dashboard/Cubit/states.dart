@@ -34,6 +34,8 @@ class ProductAvailabilityToggledState extends AdminDashboardStates {}
 
 class ProductDialogTitleSwitchedState extends AdminDashboardStates {}
 
+class CustomerSelectedState extends AdminDashboardStates {}
+
 
 
 
